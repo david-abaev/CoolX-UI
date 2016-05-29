@@ -10,7 +10,21 @@ namespace CoolXUI
 		public static List<Setter> GetSetters<T> (string classes)
 		{
 			List<Setter> setters = new List<Setter> ();
-			List<string> classesList = new List<string> (classes.Split (';'));
+			List<string> classesList = new List<string> ();
+
+			#region Prepare classes
+			foreach (string CoolXClass in classes.Split (';')) {
+				string className = CoolXClass.Split (':') [0].ToLower ();
+				string newCoolXClass = String.Empty;
+				if (className != "text" && className != "placeholder") {
+					newCoolXClass = CoolXClass.ToLower ();
+				} else {
+					newCoolXClass = className + ":" + CoolXClass.Split (':') [1];
+				}
+				classesList.Add (newCoolXClass);
+			}
+			#endregion
+
 			try {
 				GetBaseSetters (ref setters, ref classesList);
 
@@ -78,10 +92,10 @@ namespace CoolXUI
 		private static void GetSettersForActivityIndicator (ref List<Setter> setters, List<string> classes)
 		{
 			foreach (string CoolXClass in classes) {
-				if (CoolXClass.Contains ("color-")) {
+				if (CoolXClass.Contains ("color:")) {
 					setters.Add (new Setter { 
 						Property = ActivityIndicator.ColorProperty,
-						Value = ColorHelper.GetColor (CoolXClass.Split ('-') [1]) 
+						Value = ColorHelper.GetColor (CoolXClass.Split (':') [1]) 
 					});
 					continue;
 				}
@@ -106,7 +120,7 @@ namespace CoolXUI
 		private static void GetSettersForBoxView (ref List<Setter> setters, List<string> classes)
 		{
 			foreach (string CoolXClass in classes) {
-				if (CoolXClass.Contains ("color-")) {
+				if (CoolXClass.Contains ("color:")) {
 					setters.Add (new Setter { 
 						Property = BoxView.ColorProperty, 
 						Value = ColorHelper.GetColor (CoolXClass.Split ('-') [1]) 
@@ -120,53 +134,53 @@ namespace CoolXUI
 		private static void GetSettersForButton (ref List<Setter> setters, List<string> classes)
 		{
 			foreach (string CoolXClass in classes) {
-				if (CoolXClass.Contains ("text-color-")) {
+				if (CoolXClass.Contains ("text-color:")) {
 					setters.Add (new Setter { 
 						Property = Button.TextColorProperty,
-						Value = ColorHelper.GetColor (CoolXClass.Split ('-') [2]) 
+						Value = ColorHelper.GetColor (CoolXClass.Split (':') [1]) 
 					});
 					continue;
 				}
 
 				if (CoolXClass.StartsWith ("border-")) {
-					switch (CoolXClass.Split ('-') [1]) {
+					switch (CoolXClass.Split ('-') [1].Split (':') [0]) {
 					case "radius":
 						setters.Add (new Setter { 
 							Property = Button.BorderRadiusProperty,
-							Value = Convert.ToInt32 (CoolXClass.Split ('-') [2])
+							Value = Convert.ToInt32 (CoolXClass.Split (':') [1])
 						});
 						break;
 
 					case "width":
 						setters.Add (new Setter { 
 							Property = Button.BorderWidthProperty,
-							Value = Convert.ToDouble (CoolXClass.Split ('-') [2])
+							Value = Convert.ToDouble (CoolXClass.Split (':') [1])
 						});
 						break;
 
 					case "color":
 						setters.Add (new Setter { 
 							Property = Button.BorderColorProperty,
-							Value = ColorHelper.GetColor (CoolXClass.Split ('-') [2])
+							Value = ColorHelper.GetColor (CoolXClass.Split (':') [1])
 						});
 						break;
 					}
 				}
-				if (CoolXClass.StartsWith ("font-size-")) {
-					double fontSize = Convert.ToDouble (CoolXClass.Split ('-') [2]);
+				if (CoolXClass.StartsWith ("font-size:")) {
+					double fontSize = Convert.ToDouble (CoolXClass.Split (':') [1]);
 					setters.Add (new Setter{ Property = Button.FontSizeProperty, Value = fontSize });
 					continue;
 				}
-				if (CoolXClass.StartsWith ("text-color")) {
+				if (CoolXClass.StartsWith ("text-color:")) {
 					setters.Add (new Setter {
 						Property = Button.TextProperty,
-						Value = ColorHelper.GetColor (CoolXClass.Split ('-') [2])
+						Value = ColorHelper.GetColor (CoolXClass.Split (':') [1])
 					});
 					continue;
 				}
 
-				if (CoolXClass.StartsWith ("text-")) {
-					setters.Add (new Setter{ Property = Button.TextProperty, Value = CoolXClass.Split ('-') [1] });
+				if (CoolXClass.StartsWith ("text:")) {
+					setters.Add (new Setter{ Property = Button.TextProperty, Value = CoolXClass.Split (':') [1] });
 					continue;
 				}
 
@@ -219,10 +233,10 @@ namespace CoolXUI
 		private static void GetSettersForEntry (ref List<Setter> setters, List<string> classes)
 		{
 			foreach (string CoolXClass in classes) {
-				if (CoolXClass.Contains ("text-color-")) {
+				if (CoolXClass.Contains ("text-color:")) {
 					setters.Add (new Setter { 
 						Property = Entry.TextColorProperty, 
-						Value = ColorHelper.GetColor (CoolXClass.Split ('-') [2]) 
+						Value = ColorHelper.GetColor (CoolXClass.Split (':') [1]) 
 					});
 					continue;
 				}
@@ -316,16 +330,16 @@ namespace CoolXUI
 		private static void GetSettersForLabel (ref List<Setter> setters, List<string> classes)
 		{
 			foreach (string CoolXClass in classes) {
-				if (CoolXClass.Contains ("-color-")) {
+				if (CoolXClass.Contains ("text-color:")) {
 					setters.Add (new Setter { 
-						Property = CoolXClass.Split ('-') [0] == "text" ? Label.TextColorProperty : Label.BackgroundColorProperty, 
-						Value = ColorHelper.GetColor (CoolXClass.Split ('-') [2]) 
+						Property = Label.TextColorProperty, 
+						Value = ColorHelper.GetColor (CoolXClass.Split (':') [1]) 
 					});
 					continue;
 				}
 
-				if (CoolXClass.StartsWith ("line-break-")) {
-					switch (CoolXClass.Split ('-') [2]) {
+				if (CoolXClass.StartsWith ("line-break")) {
+					switch (CoolXClass.Split (':') [1]) {
 					case "none":
 						setters.Add (new Setter{ Property = Label.LineBreakModeProperty, Value = LineBreakMode.NoWrap });
 						break;
@@ -348,8 +362,8 @@ namespace CoolXUI
 					continue;
 				}
 
-				if (CoolXClass.StartsWith ("font-attr-")) {
-					switch (CoolXClass.Split ('-') [2]) {
+				if (CoolXClass.StartsWith ("font-attr:")) {
+					switch (CoolXClass.Split (':') [1]) {
 					case "none":
 						setters.Add (new Setter{ Property = Label.FontAttributesProperty, Value = FontAttributes.None });
 						break;
@@ -363,14 +377,14 @@ namespace CoolXUI
 					continue;
 				}
 
-				if (CoolXClass.StartsWith ("font-size-")) {
-					double fontSize = Convert.ToDouble (CoolXClass.Split ('-') [2]);
+				if (CoolXClass.StartsWith ("font-size:")) {
+					double fontSize = Convert.ToDouble (CoolXClass.Split (':') [1]);
 					setters.Add (new Setter{ Property = Label.FontSizeProperty, Value = fontSize });
 					continue;
 				}
 
-				if (CoolXClass.StartsWith ("text-")) {
-					setters.Add (new Setter{ Property = Label.TextProperty, Value = CoolXClass.Split ('-') [1] });
+				if (CoolXClass.StartsWith ("text:")) {
+					setters.Add (new Setter{ Property = Label.TextProperty, Value = CoolXClass.Split (':') [1] });
 					continue;
 				}
 
@@ -413,10 +427,10 @@ namespace CoolXUI
 		private static void GetSettersForSearchBar (ref List<Setter> setters, List<string> classes)
 		{
 			foreach (string CoolXClass in classes) {
-				if (CoolXClass.Contains ("cancel-color-")) {
+				if (CoolXClass.Contains ("cancel-color:")) {
 					setters.Add (new Setter { 
 						Property = SearchBar.CancelButtonColorProperty, 
-						Value = ColorHelper.GetColor (CoolXClass.Split ('-') [2]) 
+						Value = ColorHelper.GetColor (CoolXClass.Split (':') [1]) 
 					});
 					continue;
 				}
@@ -624,7 +638,7 @@ namespace CoolXUI
 				if (CoolXClass.Contains ("bg-color")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.BackgroundColorProperty, 
-						Value = ColorHelper.GetColor (CoolXClass.Split ('-') [2]) 
+						Value = ColorHelper.GetColor (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -633,7 +647,7 @@ namespace CoolXUI
 				if (CoolXClass.Contains ("anchor-x")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.AnchorXProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					continue;
 				}
@@ -641,7 +655,7 @@ namespace CoolXUI
 				if (CoolXClass.Contains ("anchor-y")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.AnchorYProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -650,7 +664,7 @@ namespace CoolXUI
 				if (CoolXClass.Contains ("height")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.HeightProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [1]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -659,7 +673,7 @@ namespace CoolXUI
 				if (CoolXClass.Contains ("min-height")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.MinimumHeightRequestProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -668,7 +682,7 @@ namespace CoolXUI
 				if (CoolXClass.Contains ("height-request")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.HeightRequestProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -677,7 +691,7 @@ namespace CoolXUI
 				if (CoolXClass.Contains ("width")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.WidthProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [1]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -686,7 +700,7 @@ namespace CoolXUI
 				if (CoolXClass.Contains ("min-width")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.MinimumWidthRequestProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -695,7 +709,7 @@ namespace CoolXUI
 				if (CoolXClass.Contains ("width-request")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.WidthRequestProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -704,7 +718,7 @@ namespace CoolXUI
 				if (CoolXClass.StartsWith ("rotation")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.RotationProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [1]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -713,7 +727,7 @@ namespace CoolXUI
 				if (CoolXClass.StartsWith ("rotation-x")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.RotationXProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -722,7 +736,7 @@ namespace CoolXUI
 				if (CoolXClass.StartsWith ("rotation-y")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.RotationYProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -731,7 +745,7 @@ namespace CoolXUI
 				if (CoolXClass.StartsWith ("translation-x")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.TranslationXProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -740,7 +754,7 @@ namespace CoolXUI
 				if (CoolXClass.StartsWith ("translation-y")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.TranslationYProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [2]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -749,7 +763,7 @@ namespace CoolXUI
 				if (CoolXClass.StartsWith ("x-")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.XProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [1]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -758,7 +772,7 @@ namespace CoolXUI
 				if (CoolXClass.StartsWith ("y-")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.YProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [1]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -767,7 +781,7 @@ namespace CoolXUI
 				if (CoolXClass.StartsWith ("opacity")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.OpacityProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [1]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
@@ -777,7 +791,7 @@ namespace CoolXUI
 				if (CoolXClass.StartsWith ("scale")) {
 					setters.Add (new Setter { 
 						Property = VisualElement.ScaleProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split ('-') [1]) 
+						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
 					});
 					classes.Remove (CoolXClass);
 					continue;
