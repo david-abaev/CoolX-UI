@@ -51,4 +51,4 @@ CoolX.GetStyle<T>("text-color-#fff")
 ### If you already have your style and want to add CoolX classes
 
 
-For more information you can read [documentation](https://coolx-ui.com)
+For more information you can read [documentation](http://coolx-ui.com)
