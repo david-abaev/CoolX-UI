@@ -1,5 +1,8 @@
 # CoolX-UI
-This is UI Kit for Xamarin. It's include Styles,Setters, Triggers and Behaviors for using in the building Xmaarin App (Xamarin.Forms / Xamarin.iOS / Xamarin.Android )
+This is UI Kit for Xamarin. It's include Styles,Setters, Triggers and Behaviors for using in the building Xamarin App (Xamarin.Forms / Xamarin.iOS / Xamarin.Android )
+
+#### To Do
+Add Triggers and Behaviors in the next release.
 
 ### How to use 
 
