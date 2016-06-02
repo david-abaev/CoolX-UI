@@ -227,6 +227,7 @@ namespace CoolXUI
 					});
 					continue;
 				}
+
 			}
 		}
 
@@ -594,42 +595,7 @@ namespace CoolXUI
 
 		}
 
-		private static void GetSettersForWebView (ref List<Setter> setters, List<string> classes)
-		{
-			foreach (string CoolXClass in classes) {
-
-				switch (CoolXClass) {
-				case "can-back":
-					setters.Add (new Setter { 
-						Property = WebView.CanGoBackProperty, 
-						Value = true
-					});
-					break;
-
-				case "can-forward":
-					setters.Add (new Setter { 
-						Property = WebView.CanGoForwardProperty, 
-						Value = true
-					});
-					break;
-
-				case "cant-back":
-					setters.Add (new Setter { 
-						Property = WebView.CanGoBackProperty, 
-						Value = false
-					});
-					break;
-
-				case "cant-forward":
-					setters.Add (new Setter { 
-						Property = WebView.CanGoForwardProperty, 
-						Value = false
-					});
-					break;
-				}
-
-			}
-		}
+	
 
 		private static void GetBaseSetters (ref List<Setter> setters, ref List<string> classes)
 		{
@@ -661,14 +627,7 @@ namespace CoolXUI
 					continue;
 				}
 
-				if (CoolXClass.Contains ("height")) {
-					setters.Add (new Setter { 
-						Property = VisualElement.HeightProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
-					});
-					classes.Remove (CoolXClass);
-					continue;
-				}
+
 
 				if (CoolXClass.Contains ("min-height")) {
 					setters.Add (new Setter { 
@@ -688,14 +647,6 @@ namespace CoolXUI
 					continue;
 				}
 
-				if (CoolXClass.Contains ("width")) {
-					setters.Add (new Setter { 
-						Property = VisualElement.WidthProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
-					});
-					classes.Remove (CoolXClass);
-					continue;
-				}
 
 				if (CoolXClass.Contains ("min-width")) {
 					setters.Add (new Setter { 
@@ -760,23 +711,7 @@ namespace CoolXUI
 					continue;
 				}
 
-				if (CoolXClass.StartsWith ("x-")) {
-					setters.Add (new Setter { 
-						Property = VisualElement.XProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
-					});
-					classes.Remove (CoolXClass);
-					continue;
-				}
 
-				if (CoolXClass.StartsWith ("y-")) {
-					setters.Add (new Setter { 
-						Property = VisualElement.YProperty, 
-						Value = Convert.ToDouble (CoolXClass.Split (':') [1]) 
-					});
-					classes.Remove (CoolXClass);
-					continue;
-				}
 
 				if (CoolXClass.StartsWith ("opacity")) {
 					setters.Add (new Setter { 

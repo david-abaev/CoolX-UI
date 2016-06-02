@@ -20,7 +20,7 @@ namespace CoolXUIExample
 					Padding = 25,
 					Children = {
 						new Label {
-							Style = CoolXStyle.AddSettersToStyle (labelStyle, CoolXSetter.GetSetters<Label> ("bg-color:blue;horizontal-center;tEXt:Welcome to CoolX UI!;"))
+							Style = CoolXStyle.AddSettersToStyle (labelStyle, CoolXSetter.GetSetters<Label> ("bg-color:blue;horizontal-center;tEXt:Welcome to CoolX UI!;font-attr:italic;"))
 						},
 						new ActivityIndicator {
 							Style = CoolXUI.CoolXStyle.GetStyle<ActivityIndicator> ("color:rED;on;")
