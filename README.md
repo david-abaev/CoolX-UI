@@ -48,7 +48,3 @@ Also you can use HEX color in the next way:
 CoolX.GetStyle<T>("text-color-#fff")
 ```
 
-### If you already have your style and want to add CoolX classes
-
-
-For more information you can read [documentation](http://coolx-ui.com)
