@@ -1,9 +1,6 @@
 # CoolX-UI
 This is UI Kit for Xamarin. It's include Styles,Setters, Triggers and Behaviors for using in the building Xamarin App (Xamarin.Forms / Xamarin.iOS / Xamarin.Android )
 
-#### To Do
-Add Triggers and Behaviors in the next release.
-
 ### How to use 
 
 1) Install CoolX-UI package from Nuget. Add using CoolXUI to your *.cs file.
